@@ -1,0 +1,95 @@
+syntax = "proto3";
+
+package warehouse_proto;
+
+service WarehouseService {
+  // API to list all stock items in a warehouse
+  rpc ListStock(ListStockRequest) returns (ListStockResponse) {}
+
+  // API to add new stock for a product in a warehouse
+  rpc AddStock(AddStockRequest) returns (AddStockResponse) {}
+
+  // API to edit existing stock for a product in a warehouse
+  rpc EditStock(EditStockRequest) returns (EditStockResponse) {}
+
+  // API to remove stock for a product in a warehouse
+  rpc RemoveStock(RemoveStockRequest) returns (RemoveStockResponse) {}
+
+  // API to transfer products between warehouses
+  rpc TransferProducts(TransferProductsRequest) returns (TransferProductsResponse) {}
+
+  // API to activate or deactivate a warehouse
+  rpc SetWarehouseStatus(SetWarehouseStatusRequest) returns (SetWarehouseStatusResponse) {}
+}
+
+message ListStockRequest {
+  int32 warehouse_id = 1; // ID of the warehouse to list stock for
+}
+
+message ListStockResponse {
+  message StockItem {
+    int32 product_id = 1; // ID of the product
+    int32 quantity = 2; // Quantity of the product in stock
+  }
+  repeated StockItem stock_items = 1; // List of stock items in the warehouse
+  int32 warehouse_id = 2; // ID of the warehouse
+  bool warehouse_status = 3; // Indicates if the warehouse is active
+}
+
+message AddStockRequest {
+  int32 warehouse_id = 1; // ID of the warehouse to add stock to
+  int32 product_id = 2; // ID of the product
+  int32 quantity = 3; // Quantity to add to stock
+}
+
+message AddStockResponse {
+  bool success = 1; // Indicates if the stock was successfully added
+  string message = 2; // Additional message or error description
+}
+
+message EditStockRequest {
+  int32 warehouse_id = 1; // ID of the warehouse
+  int32 product_id = 2; // ID of the product
+  int32 new_quantity = 3; // New quantity of the product in stock
+}
+
+message EditStockResponse {
+  bool success = 1; // Indicates if the stock was successfully edited
+  string message = 2; // Additional message or error description
+}
+
+message RemoveStockRequest {
+  int32 warehouse_id = 1; // ID of the warehouse
+  int32 product_id = 2; // ID of the product
+}
+
+message RemoveStockResponse {
+  bool success = 1; // Indicates if the stock was successfully removed
+  string message = 2; // Additional message or error description
+}
+
+message TransferProductsRequest {
+  int32 from_warehouse_id = 1; // ID of the warehouse to transfer products from
+  int32 to_warehouse_id = 2; // ID of the warehouse to transfer products to
+  repeated ProductTransfer products = 3; // List of products to transfer
+
+  message ProductTransfer {
+    int32 product_id = 1; // ID of the product
+    int32 quantity = 2; // Quantity to transfer
+  }
+}
+
+message TransferProductsResponse {
+  bool success = 1; // Indicates if the product transfer was successful
+  string message = 2; // Additional message or error description
+}
+
+message SetWarehouseStatusRequest {
+  int32 warehouse_id = 1; // ID of the warehouse
+  bool active = 2; // true to activate, false to deactivate
+}
+
+message SetWarehouseStatusResponse {
+  bool success = 1; // Indicates if the status update was successful
+  string message = 2; // Additional message or error description
+}

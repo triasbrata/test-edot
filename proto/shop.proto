@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+import "warehouse.proto"; // Import the warehouse service
+
+package shop_proto;
+
+service ShopService {
+  // API to retrieve the list of warehouses for a shop
+  rpc ListWarehouses(ListWarehousesRequest) returns (ListWarehousesResponse) {}
+
+  // API to add a new warehouse to a shop
+  rpc AddWarehouse(AddWarehouseRequest) returns (AddWarehouseResponse) {}
+
+  // API to list stock items in a warehouse via WarehouseService
+  rpc ListStock(ShopListStockRequest) returns (warehouse_proto.ListStockResponse) {}
+
+  // API to add stock to a warehouse via WarehouseService
+  rpc AddStock(ShopAddStockRequest) returns (warehouse_proto.AddStockResponse) {}
+
+  // API to edit stock in a warehouse via WarehouseService
+  rpc EditStock(ShopEditStockRequest) returns (warehouse_proto.EditStockResponse) {}
+
+  // API to remove stock from a warehouse via WarehouseService
+  rpc RemoveStock(ShopRemoveStockRequest) returns (warehouse_proto.RemoveStockResponse) {}
+
+  // API to transfer products between warehouses via WarehouseService
+  rpc TransferProducts(ShopTransferProductsRequest) returns (warehouse_proto.TransferProductsResponse) {}
+
+  // API to activate or deactivate a warehouse via WarehouseService
+  rpc SetWarehouseStatus(ShopSetWarehouseStatusRequest) returns (warehouse_proto.SetWarehouseStatusResponse) {}
+}
+
+message ListWarehousesRequest {
+  int32 shop_id = 1; // ID of the shop to retrieve warehouses for
+}
+
+message ListWarehousesResponse {
+  message Warehouse {
+    int32 id = 1; // Unique ID of the warehouse
+    string name = 2; // Name of the warehouse
+    string location = 3; // Location/address of the warehouse
+    bool active = 4; // Indicates if the warehouse is active
+  }
+  repeated Warehouse warehouses = 1; // List of warehouses associated with the shop
+}
+
+message AddWarehouseRequest {
+  int32 shop_id = 1; // ID of the shop to which the warehouse is being added
+  string name = 2; // Name of the warehouse
+  string location = 3; // Location/address of the warehouse
+}
+
+message AddWarehouseResponse {
+  int32 warehouse_id = 1; // Unique ID of the newly added warehouse
+  bool success = 2; // Indicates if the warehouse was successfully added
+  string message = 3; // Additional message or error description
+}
+
+message ShopListStockRequest {
+  int32 warehouse_id = 1; // ID of the warehouse to list stock for
+}
+
+message ShopAddStockRequest {
+  int32 warehouse_id = 1; // ID of the warehouse to add stock to
+  int32 product_id = 2; // ID of the product
+  int32 quantity = 3; // Quantity to add to stock
+}
+
+message ShopEditStockRequest {
+  int32 warehouse_id = 1; // ID of the warehouse
+  int32 product_id = 2; // ID of the product
+  int32 new_quantity = 3; // New quantity of the product in stock
+}
+
+message ShopRemoveStockRequest {
+  int32 warehouse_id = 1; // ID of the warehouse
+  int32 product_id = 2; // ID of the product
+}
+
+message ShopTransferProductsRequest {
+  int32 from_warehouse_id = 1; // ID of the warehouse to transfer products from
+  int32 to_warehouse_id = 2; // ID of the warehouse to transfer products to
+  repeated ProductTransfer products = 3; // List of products to transfer
+
+  message ProductTransfer {
+    int32 product_id = 1; // ID of the product
+    int32 quantity = 2; // Quantity to transfer
+  }
+}
+
+message ShopSetWarehouseStatusRequest {
+  int32 warehouse_id = 1; // ID of the warehouse
+  bool active = 2; // true to activate, false to deactivate
+}

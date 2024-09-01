@@ -1,22 +1,25 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/test-edot/src",
+  "sourceRoot": "apps/api/src",
   "compilerOptions": {
+    "assets": [
+      "**/*.proto"
+    ],
     "deleteOutDir": true,
-    "webpack": true,
-    "tsConfigPath": "apps/test-edot/tsconfig.app.json"
+    "webpack": false,
+    "tsConfigPath": "apps/api/tsconfig.app.json"
   },
   "monorepo": true,
-  "root": "apps/test-edot",
+  "root": "apps/api",
   "projects": {
-    "test-edot": {
+    "api": {
       "type": "application",
-      "root": "apps/test-edot",
+      "root": "apps/api",
       "entryFile": "main",
-      "sourceRoot": "apps/test-edot/src",
+      "sourceRoot": "apps/api/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/test-edot/tsconfig.app.json"
+        "tsConfigPath": "apps/api/tsconfig.app.json"
       }
     },
     "user-service": {
@@ -62,6 +65,24 @@
       "sourceRoot": "apps/shop-service/src",
       "compilerOptions": {
         "tsConfigPath": "apps/shop-service/tsconfig.app.json"
+      }
+    },
+    "sentry": {
+      "type": "library",
+      "root": "libs/sentry",
+      "entryFile": "index",
+      "sourceRoot": "libs/sentry/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/sentry/tsconfig.lib.json"
+      }
+    },
+    "const": {
+      "type": "library",
+      "root": "libs/const",
+      "entryFile": "index",
+      "sourceRoot": "libs/const/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/const/tsconfig.lib.json"
       }
     }
   }

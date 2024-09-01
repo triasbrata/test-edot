@@ -17,6 +17,12 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    "paths": {}
+    "paths": {
+      "@libs/sentry/*": ["libs/sentry/src/*"],
+      "@libs/const/*": ["libs/const/src/*"],
+      "@libs/proto/*": ["libs/proto/src/*"]
+    },
+    "inlineSources": true,
+    "sourceRoot": "/"
   }
 }

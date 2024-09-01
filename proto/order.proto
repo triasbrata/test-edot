@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package order_proto;
+
+service OrderService {
+  // API for placing an order and reserving stock for the items in the order
+  rpc Checkout(CheckoutRequest) returns (CheckoutResponse) {}
+}
+
+message CheckoutRequest {
+  int32 user_id = 1; // ID of the customer placing the order
+  repeated OrderItem items = 2; // List of items in the order, each including product ID and quantity
+  int32 shop_id = 3; // ID of the shop where the order is being placed
+
+  message OrderItem {
+    string product_id = 1; // ID of the product being ordered
+    int32 quantity = 2; // Quantity of the product to reserve during checkout
+  }
+}
+
+message CheckoutResponse {
+  int32 order_id = 1; // Unique ID assigned to the created order
+  bool success = 2; // Indicates whether the checkout and stock reservation were successful
+  string message = 3; // Additional information or error message related to the checkout process
+}
