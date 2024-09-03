@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "common.proto";    // Import the common message definitions
+
 package product_proto;
 
 service ProductService {
@@ -24,17 +26,21 @@ message ListProductsRequest {
 }
 
 message ListProductsResponse {
+  MessageResponseHeader responseHeader = 1; // Header for the response
+
   message Product {
     int32 id = 1; // Unique identifier for the product
     string name = 2; // Name of the product
     string description = 3; // Description of the product
     int32 price = 4; // Price of the product in the smallest currency unit (e.g., cents)
     int32 stock = 5; // Available stock for the product
+    int32 shopId = 6; // shop id
+    
   }
-  repeated Product products = 1; // List of products returned by the API
+  repeated Product products = 2; // List of products returned by the API
 
   // Pagination metadata
-  int32 total_products = 2; // Total number of products matching the request criteria
-  int32 total_pages = 3; // Total number of pages based on the page size
-  int32 current_page = 4; // Current page number
+  int32 total_products = 3; // Total number of products matching the request criteria
+  int32 total_pages = 4; // Total number of pages based on the page size
+  int32 current_page = 5; // Current page number
 }

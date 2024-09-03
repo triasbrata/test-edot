@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package common_proto;
+
+message MessageResponseHeader {
+  int32 code = 1; // Status code of the response
+  string message = 2; // Response message (e.g., error or success message)
+  bool success = 3; // Whether the request was successful
+}

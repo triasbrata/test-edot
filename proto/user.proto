@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package user_proto;
 
+import "common.proto";
+
 service UserService {
   // API for user login
   rpc Login(LoginRequest) returns (LoginResponse) {}
@@ -9,15 +11,17 @@ service UserService {
 
 message LoginRequest {
   string type = 1; // Type of login (e.g., email, username)
-  string identity = 2; // Login identifier (e.g., email address or username)
+  string identity = 2; // Login identifier (e.g., email address or phone number)
+  string password = 3; // Password of the user
 }
 
 message LoginResponse {
+  MessageResponseHeader responseHeader = 1; // Header for the response
   message User {
     string name = 1; // Name of the user
     string email = 2; // Email address of the user
     string phoneNumber = 3; // Phone number of the user
   }
-  User user = 1; // User details
-  string token = 2; // Authentication token for the session
+  User user = 2; // User details
+  string token = 3;
 }

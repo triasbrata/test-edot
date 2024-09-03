@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 import "warehouse.proto"; // Import the warehouse service
+import "common.proto";    // Import the common message definitions
 
 package shop_proto;
 
@@ -35,13 +36,15 @@ message ListWarehousesRequest {
 }
 
 message ListWarehousesResponse {
+  common_proto.MessageResponseHeader responseHeader = 1; // Header for the response
+
   message Warehouse {
     int32 id = 1; // Unique ID of the warehouse
     string name = 2; // Name of the warehouse
     string location = 3; // Location/address of the warehouse
     bool active = 4; // Indicates if the warehouse is active
   }
-  repeated Warehouse warehouses = 1; // List of warehouses associated with the shop
+  repeated Warehouse warehouses = 2; // List of warehouses associated with the shop
 }
 
 message AddWarehouseRequest {
@@ -51,9 +54,8 @@ message AddWarehouseRequest {
 }
 
 message AddWarehouseResponse {
-  int32 warehouse_id = 1; // Unique ID of the newly added warehouse
-  bool success = 2; // Indicates if the warehouse was successfully added
-  string message = 3; // Additional message or error description
+  common_proto.MessageResponseHeader responseHeader = 1; // Header for the response
+  int32 warehouse_id = 2; // Unique ID of the newly added warehouse
 }
 
 message ShopListStockRequest {

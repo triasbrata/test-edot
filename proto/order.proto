@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "common.proto";    // Import the common message definitions
+
 package order_proto;
 
 service OrderService {
@@ -19,7 +21,6 @@ message CheckoutRequest {
 }
 
 message CheckoutResponse {
-  int32 order_id = 1; // Unique ID assigned to the created order
-  bool success = 2; // Indicates whether the checkout and stock reservation were successful
-  string message = 3; // Additional information or error message related to the checkout process
+  MessageResponseHeader responseHeader = 1; // Header for the response
+  int32 order_id = 2; // Unique ID assigned to the created order
 }

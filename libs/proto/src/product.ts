@@ -5,6 +5,7 @@
 
 import { Observable } from 'rxjs';
 import { Metadata } from '@grpc/grpc-js';
+import { common_proto } from './common';
 
 export namespace product_proto {
   export interface ProductService {
@@ -30,6 +31,8 @@ export namespace product_proto {
     sortOrder?: string;
   }
   export interface ListProductsResponse {
+    // Header for the response
+    responseHeader?: common_proto.MessageResponseHeader;
     // List of products returned by the API
     products?: ListProductsResponse.Product[];
     // Pagination metadata
@@ -51,6 +54,8 @@ export namespace product_proto {
       price?: number;
       // Available stock for the product
       stock?: number;
+      // shop id
+      shopId?: number;
     }
   }
 }

@@ -5,6 +5,8 @@
 
 import { Observable } from 'rxjs';
 import { Metadata } from '@grpc/grpc-js';
+import { warehouse_proto } from './warehouse';
+import { common_proto } from './common';
 
 export namespace shop_proto {
   export interface ShopService {
@@ -62,6 +64,8 @@ export namespace shop_proto {
     shopId?: number;
   }
   export interface ListWarehousesResponse {
+    // Header for the response
+    responseHeader?: common_proto.MessageResponseHeader;
     // List of warehouses associated with the shop
     warehouses?: ListWarehousesResponse.Warehouse[];
   }
@@ -86,12 +90,10 @@ export namespace shop_proto {
     location?: string;
   }
   export interface AddWarehouseResponse {
+    // Header for the response
+    responseHeader?: common_proto.MessageResponseHeader;
     // Unique ID of the newly added warehouse
     warehouseId?: number;
-    // Indicates if the warehouse was successfully added
-    success?: boolean;
-    // Additional message or error description
-    message?: string;
   }
   export interface ShopListStockRequest {
     // ID of the warehouse to list stock for
@@ -140,139 +142,5 @@ export namespace shop_proto {
     warehouseId?: number;
     // true to activate, false to deactivate
     active?: boolean;
-  }
-}
-export namespace warehouse_proto {
-  export interface WarehouseService {
-    // API to list all stock items in a warehouse
-    listStock(
-      data: ListStockRequest,
-      metadata?: Metadata,
-      ...rest: any[]
-    ): Observable<ListStockResponse>;
-    // API to add new stock for a product in a warehouse
-    addStock(
-      data: AddStockRequest,
-      metadata?: Metadata,
-      ...rest: any[]
-    ): Observable<AddStockResponse>;
-    // API to edit existing stock for a product in a warehouse
-    editStock(
-      data: EditStockRequest,
-      metadata?: Metadata,
-      ...rest: any[]
-    ): Observable<EditStockResponse>;
-    // API to remove stock for a product in a warehouse
-    removeStock(
-      data: RemoveStockRequest,
-      metadata?: Metadata,
-      ...rest: any[]
-    ): Observable<RemoveStockResponse>;
-    // API to transfer products between warehouses
-    transferProducts(
-      data: TransferProductsRequest,
-      metadata?: Metadata,
-      ...rest: any[]
-    ): Observable<TransferProductsResponse>;
-    // API to activate or deactivate a warehouse
-    setWarehouseStatus(
-      data: SetWarehouseStatusRequest,
-      metadata?: Metadata,
-      ...rest: any[]
-    ): Observable<SetWarehouseStatusResponse>;
-  }
-  export interface ListStockRequest {
-    // ID of the warehouse to list stock for
-    warehouseId?: number;
-  }
-  export interface ListStockResponse {
-    // List of stock items in the warehouse
-    stockItems?: ListStockResponse.StockItem[];
-    // ID of the warehouse
-    warehouseId?: number;
-    // Indicates if the warehouse is active
-    warehouseStatus?: boolean;
-  }
-  export namespace ListStockResponse {
-    export interface StockItem {
-      // ID of the product
-      productId?: number;
-      // Quantity of the product in stock
-      quantity?: number;
-    }
-  }
-  export interface AddStockRequest {
-    // ID of the warehouse to add stock to
-    warehouseId?: number;
-    // ID of the product
-    productId?: number;
-    // Quantity to add to stock
-    quantity?: number;
-  }
-  export interface AddStockResponse {
-    // Indicates if the stock was successfully added
-    success?: boolean;
-    // Additional message or error description
-    message?: string;
-  }
-  export interface EditStockRequest {
-    // ID of the warehouse
-    warehouseId?: number;
-    // ID of the product
-    productId?: number;
-    // New quantity of the product in stock
-    newQuantity?: number;
-  }
-  export interface EditStockResponse {
-    // Indicates if the stock was successfully edited
-    success?: boolean;
-    // Additional message or error description
-    message?: string;
-  }
-  export interface RemoveStockRequest {
-    // ID of the warehouse
-    warehouseId?: number;
-    // ID of the product
-    productId?: number;
-  }
-  export interface RemoveStockResponse {
-    // Indicates if the stock was successfully removed
-    success?: boolean;
-    // Additional message or error description
-    message?: string;
-  }
-  export interface TransferProductsRequest {
-    // ID of the warehouse to transfer products from
-    fromWarehouseId?: number;
-    // ID of the warehouse to transfer products to
-    toWarehouseId?: number;
-    // List of products to transfer
-    products?: TransferProductsRequest.ProductTransfer[];
-  }
-  export namespace TransferProductsRequest {
-    export interface ProductTransfer {
-      // ID of the product
-      productId?: number;
-      // Quantity to transfer
-      quantity?: number;
-    }
-  }
-  export interface TransferProductsResponse {
-    // Indicates if the product transfer was successful
-    success?: boolean;
-    // Additional message or error description
-    message?: string;
-  }
-  export interface SetWarehouseStatusRequest {
-    // ID of the warehouse
-    warehouseId?: number;
-    // true to activate, false to deactivate
-    active?: boolean;
-  }
-  export interface SetWarehouseStatusResponse {
-    // Indicates if the status update was successful
-    success?: boolean;
-    // Additional message or error description
-    message?: string;
   }
 }

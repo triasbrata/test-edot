@@ -5,6 +5,7 @@
 
 import { Observable } from 'rxjs';
 import { Metadata } from '@grpc/grpc-js';
+import { common_proto } from './common';
 
 export namespace order_proto {
   export interface OrderService {
@@ -32,11 +33,9 @@ export namespace order_proto {
     }
   }
   export interface CheckoutResponse {
+    // Header for the response
+    responseHeader?: common_proto.MessageResponseHeader;
     // Unique ID assigned to the created order
     orderId?: number;
-    // Indicates whether the checkout and stock reservation were successful
-    success?: boolean;
-    // Additional information or error message related to the checkout process
-    message?: string;
   }
 }

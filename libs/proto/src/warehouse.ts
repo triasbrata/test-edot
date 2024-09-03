@@ -5,6 +5,7 @@
 
 import { Observable } from 'rxjs';
 import { Metadata } from '@grpc/grpc-js';
+import { common_proto } from './common';
 
 export namespace warehouse_proto {
   export interface WarehouseService {
@@ -50,6 +51,8 @@ export namespace warehouse_proto {
     warehouseId?: number;
   }
   export interface ListStockResponse {
+    // Header for the response
+    responseHeader?: common_proto.MessageResponseHeader;
     // List of stock items in the warehouse
     stockItems?: ListStockResponse.StockItem[];
     // ID of the warehouse
@@ -63,6 +66,8 @@ export namespace warehouse_proto {
       productId?: number;
       // Quantity of the product in stock
       quantity?: number;
+      // Price of the product
+      price?: number;
     }
   }
   export interface AddStockRequest {
@@ -72,12 +77,12 @@ export namespace warehouse_proto {
     productId?: number;
     // Quantity to add to stock
     quantity?: number;
+    // Price of the product
+    price?: number;
   }
   export interface AddStockResponse {
-    // Indicates if the stock was successfully added
-    success?: boolean;
-    // Additional message or error description
-    message?: string;
+    // Header for the response
+    responseHeader?: common_proto.MessageResponseHeader;
   }
   export interface EditStockRequest {
     // ID of the warehouse
@@ -86,12 +91,12 @@ export namespace warehouse_proto {
     productId?: number;
     // New quantity of the product in stock
     newQuantity?: number;
+    // New price of the product
+    newPrice?: number;
   }
   export interface EditStockResponse {
-    // Indicates if the stock was successfully edited
-    success?: boolean;
-    // Additional message or error description
-    message?: string;
+    // Header for the response
+    responseHeader?: common_proto.MessageResponseHeader;
   }
   export interface RemoveStockRequest {
     // ID of the warehouse
@@ -100,10 +105,8 @@ export namespace warehouse_proto {
     productId?: number;
   }
   export interface RemoveStockResponse {
-    // Indicates if the stock was successfully removed
-    success?: boolean;
-    // Additional message or error description
-    message?: string;
+    // Header for the response
+    responseHeader?: common_proto.MessageResponseHeader;
   }
   export interface TransferProductsRequest {
     // ID of the warehouse to transfer products from
@@ -119,13 +122,13 @@ export namespace warehouse_proto {
       productId?: number;
       // Quantity to transfer
       quantity?: number;
+      // Price of the product
+      price?: number;
     }
   }
   export interface TransferProductsResponse {
-    // Indicates if the product transfer was successful
-    success?: boolean;
-    // Additional message or error description
-    message?: string;
+    // Header for the response
+    responseHeader?: common_proto.MessageResponseHeader;
   }
   export interface SetWarehouseStatusRequest {
     // ID of the warehouse
@@ -134,9 +137,7 @@ export namespace warehouse_proto {
     active?: boolean;
   }
   export interface SetWarehouseStatusResponse {
-    // Indicates if the status update was successful
-    success?: boolean;
-    // Additional message or error description
-    message?: string;
+    // Header for the response
+    responseHeader?: common_proto.MessageResponseHeader;
   }
 }

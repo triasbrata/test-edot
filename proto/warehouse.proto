@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "common.proto";    // Import the common message definitions
+
 package warehouse_proto;
 
 service WarehouseService {
@@ -27,35 +29,38 @@ message ListStockRequest {
 }
 
 message ListStockResponse {
+  MessageResponseHeader responseHeader = 1; // Header for the response
+
   message StockItem {
     int32 product_id = 1; // ID of the product
     int32 quantity = 2; // Quantity of the product in stock
+    double price = 3; // Price of the product
   }
-  repeated StockItem stock_items = 1; // List of stock items in the warehouse
-  int32 warehouse_id = 2; // ID of the warehouse
-  bool warehouse_status = 3; // Indicates if the warehouse is active
+  repeated StockItem stock_items = 2; // List of stock items in the warehouse
+  int32 warehouse_id = 3; // ID of the warehouse
+  bool warehouse_status = 4; // Indicates if the warehouse is active
 }
 
 message AddStockRequest {
   int32 warehouse_id = 1; // ID of the warehouse to add stock to
   int32 product_id = 2; // ID of the product
   int32 quantity = 3; // Quantity to add to stock
+  double price = 4; // Price of the product
 }
 
 message AddStockResponse {
-  bool success = 1; // Indicates if the stock was successfully added
-  string message = 2; // Additional message or error description
+  MessageResponseHeader responseHeader = 1; // Header for the response
 }
 
 message EditStockRequest {
   int32 warehouse_id = 1; // ID of the warehouse
   int32 product_id = 2; // ID of the product
   int32 new_quantity = 3; // New quantity of the product in stock
+  double new_price = 4; // New price of the product
 }
 
 message EditStockResponse {
-  bool success = 1; // Indicates if the stock was successfully edited
-  string message = 2; // Additional message or error description
+  MessageResponseHeader responseHeader = 1; // Header for the response
 }
 
 message RemoveStockRequest {
@@ -64,8 +69,7 @@ message RemoveStockRequest {
 }
 
 message RemoveStockResponse {
-  bool success = 1; // Indicates if the stock was successfully removed
-  string message = 2; // Additional message or error description
+  MessageResponseHeader responseHeader = 1; // Header for the response
 }
 
 message TransferProductsRequest {
@@ -76,12 +80,12 @@ message TransferProductsRequest {
   message ProductTransfer {
     int32 product_id = 1; // ID of the product
     int32 quantity = 2; // Quantity to transfer
+    double price = 3; // Price of the product
   }
 }
 
 message TransferProductsResponse {
-  bool success = 1; // Indicates if the product transfer was successful
-  string message = 2; // Additional message or error description
+  MessageResponseHeader responseHeader = 1; // Header for the response
 }
 
 message SetWarehouseStatusRequest {
@@ -90,6 +94,5 @@ message SetWarehouseStatusRequest {
 }
 
 message SetWarehouseStatusResponse {
-  bool success = 1; // Indicates if the status update was successful
-  string message = 2; // Additional message or error description
+  MessageResponseHeader responseHeader = 1; // Header for the response
 }

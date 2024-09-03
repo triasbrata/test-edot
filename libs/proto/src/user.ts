@@ -5,6 +5,7 @@
 
 import { Observable } from 'rxjs';
 import { Metadata } from '@grpc/grpc-js';
+import { common_proto } from './common';
 
 export namespace user_proto {
   export interface UserService {
@@ -18,13 +19,16 @@ export namespace user_proto {
   export interface LoginRequest {
     // Type of login (e.g., email, username)
     type?: string;
-    // Login identifier (e.g., email address or username)
+    // Login identifier (e.g., email address or phone number)
     identity?: string;
+    // Password of the user
+    password?: string;
   }
   export interface LoginResponse {
+    // Header for the response
+    responseHeader?: common_proto.MessageResponseHeader;
     // User details
     user?: LoginResponse.User;
-    // Authentication token for the session
     token?: string;
   }
   export namespace LoginResponse {
