@@ -1,9 +1,9 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
-import { LoginDto, LoginType } from '../dto/user.dto/user.dto';
+import { LoginDto } from '../dto/user.dto/user.dto';
 import { ClientGrpc } from '@nestjs/microservices';
 import { Microservices } from '@libs/const/index';
 import { user_proto } from '@libs/proto/user';
-import { map } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class UserService implements OnModuleInit {
@@ -22,22 +22,13 @@ export class UserService implements OnModuleInit {
   }
 
   async doLogin(body: LoginDto) {
-    return this.userGRPCService
-      .login({ identity: body.identity, type: body.type })
-      .pipe(
-        map((it) => {
-          console.log(it);
-          return it;
-        }),
-        map((it) => ({
-          user: {
-            name: it.user.name,
-            email: body.type === LoginType.EMAIL ? it.user.email : undefined,
-            phoneNumber:
-              body.type === LoginType.PHONE ? it.user.phoneNumber : undefined,
-          },
-          token: it.token,
-        })),
-      );
+    const res = await firstValueFrom(
+      this.userGRPCService.login({
+        identity: body.identity,
+        type: body.type,
+        password: body.password,
+      }),
+    );
+    return res;
   }
 }

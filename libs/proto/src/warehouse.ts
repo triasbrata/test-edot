@@ -5,7 +5,6 @@
 
 import { Observable } from 'rxjs';
 import { Metadata } from '@grpc/grpc-js';
-import { common_proto } from './common';
 
 export namespace warehouse_proto {
   export interface WarehouseService {
@@ -47,6 +46,8 @@ export namespace warehouse_proto {
     ): Observable<SetWarehouseStatusResponse>;
   }
   export interface ListStockRequest {
+    // ID of the shop
+    shopId?: number;
     // ID of the warehouse to list stock for
     warehouseId?: number;
   }
@@ -71,6 +72,8 @@ export namespace warehouse_proto {
     }
   }
   export interface AddStockRequest {
+    // ID of the shop
+    shopId?: number;
     // ID of the warehouse to add stock to
     warehouseId?: number;
     // ID of the product
@@ -85,6 +88,8 @@ export namespace warehouse_proto {
     responseHeader?: common_proto.MessageResponseHeader;
   }
   export interface EditStockRequest {
+    // ID of the shop
+    shopId?: number;
     // ID of the warehouse
     warehouseId?: number;
     // ID of the product
@@ -99,6 +104,8 @@ export namespace warehouse_proto {
     responseHeader?: common_proto.MessageResponseHeader;
   }
   export interface RemoveStockRequest {
+    // ID of the shop
+    shopId?: number;
     // ID of the warehouse
     warehouseId?: number;
     // ID of the product
@@ -109,6 +116,8 @@ export namespace warehouse_proto {
     responseHeader?: common_proto.MessageResponseHeader;
   }
   export interface TransferProductsRequest {
+    // ID of the shop
+    shopId?: number;
     // ID of the warehouse to transfer products from
     fromWarehouseId?: number;
     // ID of the warehouse to transfer products to
@@ -131,6 +140,8 @@ export namespace warehouse_proto {
     responseHeader?: common_proto.MessageResponseHeader;
   }
   export interface SetWarehouseStatusRequest {
+    // ID of the shop
+    shopId?: number;
     // ID of the warehouse
     warehouseId?: number;
     // true to activate, false to deactivate
@@ -139,5 +150,15 @@ export namespace warehouse_proto {
   export interface SetWarehouseStatusResponse {
     // Header for the response
     responseHeader?: common_proto.MessageResponseHeader;
+  }
+}
+export namespace common_proto {
+  export interface MessageResponseHeader {
+    // Status code of the response
+    code?: number;
+    // Response message (e.g., error or success message)
+    message?: string;
+    // Whether the request was successful
+    success?: boolean;
   }
 }

@@ -1,0 +1,8 @@
+{
+  "cSpell.words": [
+    "SUPABASE"
+  ],
+  "files.exclude": {
+    "dist": true
+  }
+}

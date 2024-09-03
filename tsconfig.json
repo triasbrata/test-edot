@@ -18,9 +18,36 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@libs/sentry/*": ["libs/sentry/src/*"],
-      "@libs/const/*": ["libs/const/src/*"],
-      "@libs/proto/*": ["libs/proto/src/*"]
+      "@libs/sentry/*": [
+        "libs/sentry/src/*"
+      ],
+      "@libs/const": [
+        "libs/const/src"
+      ],
+      "@libs/const/*": [
+        "libs/const/src/*"
+      ],
+      "@libs/proto/*": [
+        "libs/proto/src/*"
+      ],
+      "@libs/supabase": [
+        "libs/supabase/src"
+      ],
+      "@libs/supabase/*": [
+        "libs/supabase/src/*"
+      ],
+      "@libs/bcrypt": [
+        "libs/bcrypt/src"
+      ],
+      "@libs/bcrypt/*": [
+        "libs/bcrypt/src/*"
+      ],
+      "@libs/commons": [
+        "libs/commons/src"
+      ],
+      "@libs/commons/*": [
+        "libs/commons/src/*"
+      ]
     },
     "inlineSources": true,
     "sourceRoot": "/"

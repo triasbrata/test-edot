@@ -25,7 +25,8 @@ service WarehouseService {
 }
 
 message ListStockRequest {
-  int32 warehouse_id = 1; // ID of the warehouse to list stock for
+  int32 shop_id = 1; // ID of the shop
+  int32 warehouse_id = 2; // ID of the warehouse to list stock for
 }
 
 message ListStockResponse {
@@ -42,10 +43,11 @@ message ListStockResponse {
 }
 
 message AddStockRequest {
-  int32 warehouse_id = 1; // ID of the warehouse to add stock to
-  int32 product_id = 2; // ID of the product
-  int32 quantity = 3; // Quantity to add to stock
-  double price = 4; // Price of the product
+  int32 shop_id = 1; // ID of the shop
+  int32 warehouse_id = 2; // ID of the warehouse to add stock to
+  int32 product_id = 3; // ID of the product
+  int32 quantity = 4; // Quantity to add to stock
+  double price = 5; // Price of the product
 }
 
 message AddStockResponse {
@@ -53,10 +55,11 @@ message AddStockResponse {
 }
 
 message EditStockRequest {
-  int32 warehouse_id = 1; // ID of the warehouse
-  int32 product_id = 2; // ID of the product
-  int32 new_quantity = 3; // New quantity of the product in stock
-  double new_price = 4; // New price of the product
+  int32 shop_id = 1; // ID of the shop
+  int32 warehouse_id = 2; // ID of the warehouse
+  int32 product_id = 3; // ID of the product
+  int32 new_quantity = 4; // New quantity of the product in stock
+  double new_price = 5; // New price of the product
 }
 
 message EditStockResponse {
@@ -64,8 +67,9 @@ message EditStockResponse {
 }
 
 message RemoveStockRequest {
-  int32 warehouse_id = 1; // ID of the warehouse
-  int32 product_id = 2; // ID of the product
+  int32 shop_id = 1; // ID of the shop
+  int32 warehouse_id = 2; // ID of the warehouse
+  int32 product_id = 3; // ID of the product
 }
 
 message RemoveStockResponse {
@@ -73,9 +77,10 @@ message RemoveStockResponse {
 }
 
 message TransferProductsRequest {
-  int32 from_warehouse_id = 1; // ID of the warehouse to transfer products from
-  int32 to_warehouse_id = 2; // ID of the warehouse to transfer products to
-  repeated ProductTransfer products = 3; // List of products to transfer
+  int32 shop_id = 1; // ID of the shop
+  int32 from_warehouse_id = 2; // ID of the warehouse to transfer products from
+  int32 to_warehouse_id = 3; // ID of the warehouse to transfer products to
+  repeated ProductTransfer products = 4; // List of products to transfer
 
   message ProductTransfer {
     int32 product_id = 1; // ID of the product
@@ -89,8 +94,9 @@ message TransferProductsResponse {
 }
 
 message SetWarehouseStatusRequest {
-  int32 warehouse_id = 1; // ID of the warehouse
-  bool active = 2; // true to activate, false to deactivate
+  int32 shop_id = 1; // ID of the shop
+  int32 warehouse_id = 2; // ID of the warehouse
+  bool active = 3; // true to activate, false to deactivate
 }
 
 message SetWarehouseStatusResponse {

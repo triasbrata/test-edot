@@ -4,7 +4,8 @@
   "sourceRoot": "apps/api/src",
   "compilerOptions": {
     "assets": [
-      "**/*.proto"
+      "**/*.proto",
+      "**/.env*"
     ],
     "deleteOutDir": true,
     "webpack": false,
@@ -83,6 +84,42 @@
       "sourceRoot": "libs/const/src",
       "compilerOptions": {
         "tsConfigPath": "libs/const/tsconfig.lib.json"
+      }
+    },
+    "supabase": {
+      "type": "library",
+      "root": "libs/supabase",
+      "entryFile": "index",
+      "sourceRoot": "libs/supabase/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/supabase/tsconfig.lib.json"
+      }
+    },
+    "bcrypt": {
+      "type": "library",
+      "root": "libs/bcrypt",
+      "entryFile": "index",
+      "sourceRoot": "libs/bcrypt/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/bcrypt/tsconfig.lib.json"
+      }
+    },
+    "commons": {
+      "type": "library",
+      "root": "libs/commons",
+      "entryFile": "index",
+      "sourceRoot": "libs/commons/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/commons/tsconfig.lib.json"
+      }
+    },
+    "cli": {
+      "type": "application",
+      "root": "apps/cli",
+      "entryFile": "main",
+      "sourceRoot": "apps/cli/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/cli/tsconfig.app.json"
       }
     }
   }

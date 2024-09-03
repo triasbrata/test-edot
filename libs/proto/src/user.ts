@@ -5,7 +5,6 @@
 
 import { Observable } from 'rxjs';
 import { Metadata } from '@grpc/grpc-js';
-import { common_proto } from './common';
 
 export namespace user_proto {
   export interface UserService {
@@ -40,5 +39,15 @@ export namespace user_proto {
       // Phone number of the user
       phoneNumber?: string;
     }
+  }
+}
+export namespace common_proto {
+  export interface MessageResponseHeader {
+    // Status code of the response
+    code?: number;
+    // Response message (e.g., error or success message)
+    message?: string;
+    // Whether the request was successful
+    success?: boolean;
   }
 }

@@ -5,7 +5,6 @@
 
 import { Observable } from 'rxjs';
 import { Metadata } from '@grpc/grpc-js';
-import { common_proto } from './common';
 
 export namespace order_proto {
   export interface OrderService {
@@ -37,5 +36,15 @@ export namespace order_proto {
     responseHeader?: common_proto.MessageResponseHeader;
     // Unique ID assigned to the created order
     orderId?: number;
+  }
+}
+export namespace common_proto {
+  export interface MessageResponseHeader {
+    // Status code of the response
+    code?: number;
+    // Response message (e.g., error or success message)
+    message?: string;
+    // Whether the request was successful
+    success?: boolean;
   }
 }

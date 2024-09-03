@@ -5,4 +5,5 @@ export enum LoginType {
 export class LoginDto {
   type: LoginType;
   identity: string;
+  password: string;
 }
