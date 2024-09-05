@@ -6,142 +6,6 @@
 import { Observable } from 'rxjs';
 import { Metadata } from '@grpc/grpc-js';
 
-export namespace shop_proto {
-  export interface ShopService {
-    // API to retrieve the list of warehouses for a shop
-    listWarehouses(
-      data: ListWarehousesRequest,
-      metadata?: Metadata,
-      ...rest: any[]
-    ): Observable<ListWarehousesResponse>;
-    // API to add a new warehouse to a shop
-    addWarehouse(
-      data: AddWarehouseRequest,
-      metadata?: Metadata,
-      ...rest: any[]
-    ): Observable<AddWarehouseResponse>;
-    // API to list stock items in a warehouse via WarehouseService
-    listStock(
-      data: ShopListStockRequest,
-      metadata?: Metadata,
-      ...rest: any[]
-    ): Observable<warehouse_proto.ListStockResponse>;
-    // API to add stock to a warehouse via WarehouseService
-    addStock(
-      data: ShopAddStockRequest,
-      metadata?: Metadata,
-      ...rest: any[]
-    ): Observable<warehouse_proto.AddStockResponse>;
-    // API to edit stock in a warehouse via WarehouseService
-    editStock(
-      data: ShopEditStockRequest,
-      metadata?: Metadata,
-      ...rest: any[]
-    ): Observable<warehouse_proto.EditStockResponse>;
-    // API to remove stock from a warehouse via WarehouseService
-    removeStock(
-      data: ShopRemoveStockRequest,
-      metadata?: Metadata,
-      ...rest: any[]
-    ): Observable<warehouse_proto.RemoveStockResponse>;
-    // API to transfer products between warehouses via WarehouseService
-    transferProducts(
-      data: ShopTransferProductsRequest,
-      metadata?: Metadata,
-      ...rest: any[]
-    ): Observable<warehouse_proto.TransferProductsResponse>;
-    // API to activate or deactivate a warehouse via WarehouseService
-    setWarehouseStatus(
-      data: ShopSetWarehouseStatusRequest,
-      metadata?: Metadata,
-      ...rest: any[]
-    ): Observable<warehouse_proto.SetWarehouseStatusResponse>;
-  }
-  export interface ListWarehousesRequest {
-    // ID of the shop to retrieve warehouses for
-    shopId?: number;
-  }
-  export interface ListWarehousesResponse {
-    // Header for the response
-    responseHeader?: common_proto.MessageResponseHeader;
-    // List of warehouses associated with the shop
-    warehouses?: ListWarehousesResponse.Warehouse[];
-  }
-  export namespace ListWarehousesResponse {
-    export interface Warehouse {
-      // Unique ID of the warehouse
-      id?: number;
-      // Name of the warehouse
-      name?: string;
-      // Location/address of the warehouse
-      location?: string;
-      // Indicates if the warehouse is active
-      active?: boolean;
-    }
-  }
-  export interface AddWarehouseRequest {
-    // ID of the shop to which the warehouse is being added
-    shopId?: number;
-    // Name of the warehouse
-    name?: string;
-    // Location/address of the warehouse
-    location?: string;
-  }
-  export interface AddWarehouseResponse {
-    // Header for the response
-    responseHeader?: common_proto.MessageResponseHeader;
-    // Unique ID of the newly added warehouse
-    warehouseId?: number;
-  }
-  export interface ShopListStockRequest {
-    // ID of the warehouse to list stock for
-    warehouseId?: number;
-  }
-  export interface ShopAddStockRequest {
-    // ID of the warehouse to add stock to
-    warehouseId?: number;
-    // ID of the product
-    productId?: number;
-    // Quantity to add to stock
-    quantity?: number;
-  }
-  export interface ShopEditStockRequest {
-    // ID of the warehouse
-    warehouseId?: number;
-    // ID of the product
-    productId?: number;
-    // New quantity of the product in stock
-    newQuantity?: number;
-  }
-  export interface ShopRemoveStockRequest {
-    // ID of the warehouse
-    warehouseId?: number;
-    // ID of the product
-    productId?: number;
-  }
-  export interface ShopTransferProductsRequest {
-    // ID of the warehouse to transfer products from
-    fromWarehouseId?: number;
-    // ID of the warehouse to transfer products to
-    toWarehouseId?: number;
-    // List of products to transfer
-    products?: ShopTransferProductsRequest.ProductTransfer[];
-  }
-  export namespace ShopTransferProductsRequest {
-    export interface ProductTransfer {
-      // ID of the product
-      productId?: number;
-      // Quantity to transfer
-      quantity?: number;
-    }
-  }
-  export interface ShopSetWarehouseStatusRequest {
-    // ID of the warehouse
-    warehouseId?: number;
-    // true to activate, false to deactivate
-    active?: boolean;
-  }
-}
 export namespace warehouse_proto {
   export interface WarehouseService {
     // API to list all stock items in a warehouse
@@ -149,42 +13,42 @@ export namespace warehouse_proto {
       data: ListStockRequest,
       metadata?: Metadata,
       ...rest: any[]
-    ): Observable<ListStockResponse>;
+    ): Promise<ListStockResponse>;
     // API to add new stock for a product in a warehouse
     addStock(
       data: AddStockRequest,
       metadata?: Metadata,
       ...rest: any[]
-    ): Observable<AddStockResponse>;
+    ): Promise<AddStockResponse>;
     // API to edit existing stock for a product in a warehouse
     editStock(
       data: EditStockRequest,
       metadata?: Metadata,
       ...rest: any[]
-    ): Observable<EditStockResponse>;
+    ): Promise<EditStockResponse>;
     // API to remove stock for a product in a warehouse
     removeStock(
       data: RemoveStockRequest,
       metadata?: Metadata,
       ...rest: any[]
-    ): Observable<RemoveStockResponse>;
+    ): Promise<RemoveStockResponse>;
     // API to transfer products between warehouses
     transferProducts(
       data: TransferProductsRequest,
       metadata?: Metadata,
       ...rest: any[]
-    ): Observable<TransferProductsResponse>;
+    ): Promise<TransferProductsResponse>;
     // API to activate or deactivate a warehouse
     setWarehouseStatus(
       data: SetWarehouseStatusRequest,
       metadata?: Metadata,
       ...rest: any[]
-    ): Observable<SetWarehouseStatusResponse>;
+    ): Promise<SetWarehouseStatusResponse>;
     getProductWarehouseInfo(
       data: GetProductWarehouseInfoRequest,
       metadata?: Metadata,
       ...rest: any[]
-    ): Observable<GetProductWarehouseInfoResponse>;
+    ): Promise<GetProductWarehouseInfoResponse>;
   }
   export interface GetProductWarehouseInfoRequest {
     productIds?: number[];

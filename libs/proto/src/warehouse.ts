@@ -44,6 +44,29 @@ export namespace warehouse_proto {
       metadata?: Metadata,
       ...rest: any[]
     ): Observable<SetWarehouseStatusResponse>;
+    getProductWarehouseInfo(
+      data: GetProductWarehouseInfoRequest,
+      metadata?: Metadata,
+      ...rest: any[]
+    ): Observable<GetProductWarehouseInfoResponse>;
+  }
+  export interface GetProductWarehouseInfoRequest {
+    productIds?: number[];
+    warehouseIds?: number[];
+    shopId?: number;
+  }
+  export interface GetProductWarehouseInfoResponse {
+    responseHeader?: common_proto.MessageResponseHeader;
+    data?: GetProductWarehouseInfoResponse.ProductWarehouse[];
+  }
+  export namespace GetProductWarehouseInfoResponse {
+    export interface ProductWarehouse {
+      warehouseId?: number;
+      warehouseStatus?: boolean;
+      quantity?: number;
+      price?: number;
+      productId?: number;
+    }
   }
   export interface ListStockRequest {
     // ID of the shop

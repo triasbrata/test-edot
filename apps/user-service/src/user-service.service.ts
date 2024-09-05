@@ -15,7 +15,6 @@ export class UserServiceService {
         ? await this.doLoginWithEmail(data.identity)
         : await this.doLoginWithPhoneNumber(data.identity);
     } catch (error) {
-      console.log({ error });
       if ('code' in error && error.code === 'PGRST116') {
         throw new Exception('no user found', ErrorCode.NoUserFound);
       }
@@ -29,7 +28,7 @@ export class UserServiceService {
     return this.jwt.signAsync({ id: id.toString() });
   }
   async doLoginWithPhoneNumber(phoneNumber: string) {
-    const { data, error } = await this.supabase.client
+    const { data, error } = await this.supabase
       .from('users')
       .select('id, name, phone_number, password')
       .eq('phone_number', phoneNumber)
@@ -41,7 +40,7 @@ export class UserServiceService {
     return data;
   }
   async doLoginWithEmail(email: string) {
-    const { data, error } = await this.supabase.client
+    const { data, error } = await this.supabase
       .from('users')
       .select('*')
       .eq('email', email)

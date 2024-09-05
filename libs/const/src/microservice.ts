@@ -23,13 +23,13 @@ export const Microservices = {
   },
   ProductService: {
     package: 'product_proto',
-    url: 'localhost:5003',
+    url: 'localhost:5004',
     inject: 'product-service',
     service: 'ProductService',
   },
   ShopService: {
     package: 'shop_proto',
-    url: 'localhost:5003',
+    url: 'localhost:5005',
     inject: 'shop-service',
     service: 'ShopService',
   },
@@ -59,6 +59,20 @@ export class ClientModuleGRPCService {
           package: Microservices.WarehouseService.package,
           protoPath: protoPath,
           url: Microservices.WarehouseService.url,
+        },
+      },
+    ]);
+  }
+  static registerProduct(): DynamicModule {
+    const protoPath = join(resolve('proto'), 'product.proto');
+    return ClientsModule.register([
+      {
+        name: Microservices.ProductService.inject,
+        transport: Transport.GRPC,
+        options: {
+          package: Microservices.ProductService.package,
+          protoPath: protoPath,
+          url: Microservices.ProductService.url,
         },
       },
     ]);

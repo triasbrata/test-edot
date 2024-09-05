@@ -13,7 +13,7 @@ export namespace product_proto {
       data: ListProductsRequest,
       metadata?: Metadata,
       ...rest: any[]
-    ): Observable<ListProductsResponse>;
+    ): Promise<ListProductsResponse>;
   }
   export interface ListProductsRequest {
     // Optional filter by shop ID

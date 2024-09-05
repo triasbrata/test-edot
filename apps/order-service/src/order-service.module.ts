@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { OrderServiceController } from './order-service.controller';
 import { OrderServiceService } from './order-service.service';
-import { SentryGlobalFilter, SentryModule } from '@sentry/nestjs/setup';
+import { SentryModule } from '@sentry/nestjs/setup';
 import { APP_FILTER } from '@nestjs/core';
+import { SentryGlobalFilter } from '@libs/sentry/sentry-global-filter/sentry-global.filter';
 
 @Module({
   imports: [SentryModule.forRoot()],

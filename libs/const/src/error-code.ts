@@ -7,4 +7,6 @@ export enum ErrorCode {
 
   //warehouseService
   NoWarehouseFound = 3000,
+  GetProductWarehouseInfoControllerDefault,
+  ProductWarehouseInfoProductId,
 }

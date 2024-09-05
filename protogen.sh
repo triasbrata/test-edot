@@ -15,6 +15,8 @@ OUT_DIR="${ROOT_DIR}/libs/proto/src"
 # Clean all existing generated files
 rm -r "${OUT_DIR}"
 mkdir -p "${OUT_DIR}"
+mkdir -p "${OUT_DIR}/controller"
 
 # Generate all messages
 node ./node_modules/.bin/tsproto --comments --template template.hbs --path proto --output $OUT_DIR
+node ./node_modules/.bin/tsproto --comments --template template-controller.hbs --path proto --output $OUT_DIR/controller

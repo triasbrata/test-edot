@@ -3,7 +3,6 @@ import { LoginDto } from '../dto/user.dto/user.dto';
 import { ClientGrpc } from '@nestjs/microservices';
 import { Microservices } from '@libs/const/index';
 import { user_proto } from '@libs/proto/user';
-import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class UserService implements OnModuleInit {
@@ -22,13 +21,10 @@ export class UserService implements OnModuleInit {
   }
 
   async doLogin(body: LoginDto) {
-    const res = await firstValueFrom(
-      this.userGRPCService.login({
-        identity: body.identity,
-        type: body.type,
-        password: body.password,
-      }),
-    );
-    return res;
+    return this.userGRPCService.login({
+      identity: body.identity,
+      type: body.type,
+      password: body.password,
+    });
   }
 }

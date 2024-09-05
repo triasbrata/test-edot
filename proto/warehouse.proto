@@ -22,6 +22,26 @@ service WarehouseService {
 
   // API to activate or deactivate a warehouse
   rpc SetWarehouseStatus(SetWarehouseStatusRequest) returns (SetWarehouseStatusResponse) {}
+
+  rpc GetProductWarehouseInfo(GetProductWarehouseInfoRequest) returns (GetProductWarehouseInfoResponse){}
+}
+
+message GetProductWarehouseInfoRequest  {
+  repeated int32 productIds = 1;
+  repeated int32 warehouseIds = 2;
+  int32 shopId = 3;
+}
+message GetProductWarehouseInfoResponse{
+  message ProductWarehouse {
+    int32 warehouseId = 1;
+    bool warehouseStatus = 2;
+    int32 quantity = 3;
+    double price = 4;
+    int32 productId = 5;
+  }
+  MessageResponseHeader responseHeader = 1;
+  repeated ProductWarehouse data = 2;
+
 }
 
 message ListStockRequest {

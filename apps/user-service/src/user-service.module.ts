@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { UserServiceController } from './user-service.controller';
 import { UserServiceService } from './user-service.service';
-import { SentryGlobalFilter, SentryModule } from '@sentry/nestjs/setup';
+import { SentryModule } from '@sentry/nestjs/setup';
 import { APP_FILTER } from '@nestjs/core';
 import { SupabaseModule } from '@libs/supabase';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -9,6 +9,7 @@ import { resolve } from 'path';
 import { JwtModule } from '@nestjs/jwt';
 import { EnvVarUserService } from './const';
 import { BcryptModule } from '@libs/bcrypt';
+import { SentryGlobalFilter } from '@libs/sentry/sentry-global-filter/sentry-global.filter';
 
 @Module({
   imports: [

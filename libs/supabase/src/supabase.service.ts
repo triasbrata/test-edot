@@ -17,4 +17,7 @@ export class SupabaseService<T = any> implements OnModuleInit {
   get client() {
     return this.supabase;
   }
+  from(tableName: string) {
+    return this.supabase.from(tableName);
+  }
 }

@@ -2,32 +2,35 @@ import { Controller } from '@nestjs/common';
 import { ProductServiceService } from './product-service.service'; // Assuming you have a ProductServiceService
 import { GrpcMethod } from '@nestjs/microservices';
 import { Microservices } from '@libs/const/index';
-import { product_proto } from '@libs/proto/product'; // Adjust path as necessary
-
-import { Observable, of } from 'rxjs';
+import { product_proto } from '@libs/proto/controller/product'; // Adjust path as necessary
+import { Metadata } from '@grpc/grpc-js';
 
 @Controller()
 export class ProductServiceController implements product_proto.ProductService {
   constructor(private readonly productServiceService: ProductServiceService) {}
-
   @GrpcMethod(Microservices.ProductService.service)
-  listProducts(
+  async listProducts(
     data: product_proto.ListProductsRequest,
-  ): Observable<product_proto.ListProductsResponse> {
-    // Mock response for demonstration purposes
+  ): Promise<product_proto.ListProductsResponse> {
     const res: product_proto.ListProductsResponse = {
-      products: [
-        {
-          id: 1, // Product ID
-          name: 'Sample Product', // Product name
-          description: 'This is a sample product', // Product description
-          price: 100, // Product price
-          stock: 50, // Product stock
-          shopId: 1,
-        },
-        // Add more products as needed
-      ],
+      responseHeader: {
+        success: false,
+      },
     };
-    return of(res);
+    try {
+      const products = await this.productServiceService.getProductData(data);
+      res.products = products.data;
+      res.totalPages = Math.ceil(products.totalProducts / data.pageSize);
+      res.currentPage = data.pageNumber;
+      res.totalProducts = products.totalProducts;
+    } catch (error) {
+      console.error(error);
+      if ('code' in error) {
+        res.responseHeader.code = error.code;
+      }
+      res.responseHeader.message = error.message;
+    }
+
+    return res;
   }
 }
