@@ -7,11 +7,13 @@ import { SupabaseModule } from '@libs/supabase';
 import { ConfigModule } from '@nestjs/config';
 import { resolve } from 'path';
 import { SentryGlobalFilter } from '@libs/sentry/sentry-global-filter/sentry-global.filter';
+import { RedisModule } from '@libs/commons';
 
 @Module({
   imports: [
     SentryModule.forRoot(),
     SupabaseModule.forRoot(),
+    RedisModule.forRoot(),
     ConfigModule.forRoot({
       envFilePath: ['.env.warehouse-service', '.env.warehouse-service.dev'].map(
         (it) => {

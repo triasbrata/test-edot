@@ -43,6 +43,7 @@
     "bcrypt": "^5.1.1",
     "cliffy": "^2.5.1",
     "dotenv": "^16.4.5",
+    "ioredis": "^5.4.1",
     "jose": "^5.8.0",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1"

@@ -1,4 +1,9 @@
-import { Exception } from '@libs/commons';
+import {
+  Exception,
+  RedisService,
+  captureException,
+  parseInt,
+} from '@libs/commons';
 import { ErrorCode } from '@libs/const';
 import { warehouse_proto } from '@libs/proto/controller/warehouse';
 import { SupabaseService } from '@libs/supabase';
@@ -30,6 +35,22 @@ export class WarehouseServiceService {
         }
         throw error;
       }
+      //check reserve stock
+      const warehouseReserve = Object.fromEntries(
+        await Promise.all(
+          data.map(async (it) => {
+            try {
+              const key = `warehouse_stock:reserve:${it.id}`;
+              const res = await this.redisService.get(key);
+              return [it.id, parseInt(res, 0)];
+            } catch (error) {
+              captureException(error);
+              return [it.id, 0];
+            }
+          }),
+        ),
+      );
+
       const warehouseInfo = await this.supabase
         .from('warehouses')
         .select('id, status')
@@ -47,13 +68,17 @@ export class WarehouseServiceService {
       const warehouseMap = Object.fromEntries(
         warehouseInfo.data.map(({ id, status }) => [id, { status }]),
       );
-      return data.map((it) => ({
-        price: it.price,
-        warehouseStatus: warehouseMap[it.warehouse_id].status,
-        warehouseId: it.warehouse_id,
-        productId: it.product_id,
-        quantity: it.quantity,
-      }));
+      return data.map((it) => {
+        const reserveQuantity = warehouseReserve[it.id] ?? 0;
+        return {
+          price: it.price,
+          warehouseStatus: warehouseMap[it.warehouse_id].status,
+          warehouseId: it.warehouse_id,
+          productId: it.product_id,
+          quantity:
+            it.quantity < reserveQuantity ? 0 : it.quantity - reserveQuantity,
+        };
+      });
     } catch (error) {
       console.error(error);
     }
@@ -92,7 +117,10 @@ export class WarehouseServiceService {
   /**
    *
    */
-  constructor(private readonly supabase: SupabaseService) {}
+  constructor(
+    private readonly supabase: SupabaseService,
+    private readonly redisService: RedisService,
+  ) {}
   async getWarehouseInfo(shopId: number, warehouseId?: number) {
     if (shopId && warehouseId) {
       const { data, error } = await this.supabase.client
