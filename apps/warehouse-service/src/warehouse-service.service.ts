@@ -4,14 +4,80 @@ import {
   captureException,
   parseInt,
 } from '@libs/commons';
+import { RedisKeys } from '@libs/commons/redis/const';
 import { ErrorCode } from '@libs/const';
 import { warehouse_proto } from '@libs/proto/controller/warehouse';
 import { SupabaseService } from '@libs/supabase';
 import { SupabaseErrorCode } from '@libs/supabase/const';
 import { Injectable } from '@nestjs/common';
+import { format } from 'util';
 
 @Injectable()
 export class WarehouseServiceService {
+  async reserveStock(
+    items: warehouse_proto.ReserveStockRequest.ItemReserve[],
+  ): Promise<warehouse_proto.ReserveStockResponse.ItemReserved[]> {
+    const fromDB = await this.supabase
+      .from('warehouse_stock')
+      .select('*')
+      .in(
+        'product_id',
+        items.map((it) => it.productId),
+      );
+    if (fromDB.error) {
+      throw new Exception(
+        fromDB.error.message,
+        parseInt(
+          fromDB.error.code,
+          ErrorCode.FailedGetWarehouseStockReserveStock,
+        ),
+      );
+    }
+    const reserve = Object.fromEntries(
+      await Promise.all(
+        fromDB.data.map(async (it) => {
+          try {
+            const stockFromRedis = await this.redisService.get(
+              format(RedisKeys.WarehouseReserve, it.id.toString()),
+            );
+            return [it.id, parseInt(stockFromRedis, 0)];
+          } catch (error) {
+            captureException(error);
+            return [it.id, 0];
+          }
+        }),
+      ),
+    );
+    const mapRequest = Object.fromEntries(
+      items.map(({ productId, quantity }) => [productId, quantity]),
+    );
+    //case for multiple warehouse
+    const resData: warehouse_proto.ReserveStockResponse.ItemReserved[] = [];
+    for (const {
+      quantity,
+      id,
+      price,
+      warehouse_id,
+      product_id,
+    } of fromDB.data) {
+      if (quantity == 0) {
+        continue;
+      }
+      const finalQty = quantity - reserve[id];
+      if (finalQty <= 0) {
+        continue;
+      }
+      if (finalQty - mapRequest[id] < 0) {
+        continue;
+      }
+      resData.push({
+        price,
+        productId: product_id,
+        warehouseId: warehouse_id,
+      });
+    }
+    return resData;
+  }
   async getProductWarehouseInfo(
     input: warehouse_proto.GetProductWarehouseInfoRequest,
   ): Promise<warehouse_proto.GetProductWarehouseInfoResponse['data']> {
@@ -40,7 +106,7 @@ export class WarehouseServiceService {
         await Promise.all(
           data.map(async (it) => {
             try {
-              const key = `warehouse_stock:reserve:${it.id}`;
+              const key = format(RedisKeys.WarehouseReserve, it.id.toString());
               const res = await this.redisService.get(key);
               return [it.id, parseInt(res, 0)];
             } catch (error) {
