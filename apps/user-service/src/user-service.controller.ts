@@ -2,12 +2,12 @@ import { Controller } from '@nestjs/common';
 import { UserServiceService } from './user-service.service';
 import { GrpcMethod } from '@nestjs/microservices';
 import { ErrorCode, Microservices } from '@libs/const/index';
-import { user_proto } from '@libs/proto/user';
-import { captureException } from '@sentry/nestjs';
+import { user_proto } from '@libs/proto/controller/user';
 import { Exception } from '@libs/commons';
+import { Metadata } from '@grpc/grpc-js';
 
 @Controller()
-export class UserServiceController {
+export class UserServiceController implements user_proto.UserService {
   constructor(private readonly userServiceService: UserServiceService) {}
   @GrpcMethod(Microservices.UserService.service)
   async login(data: user_proto.LoginRequest) {
@@ -33,7 +33,10 @@ export class UserServiceController {
         phoneNumber:
           'phone_number' in dataUser ? dataUser.phone_number : undefined,
       };
-      resp.token = await this.userServiceService.generateToken(dataUser.id);
+      resp.token = await this.userServiceService.generateToken({
+        ...resp.user,
+        id: dataUser.id,
+      });
       resp.responseHeader.success = true;
     } catch (error) {
       if ('code' in error) {
@@ -42,5 +45,30 @@ export class UserServiceController {
       resp.responseHeader.message = error.message;
     }
     return resp;
+  }
+
+  @GrpcMethod(Microservices.UserService.service)
+  async validateUser(
+    data: user_proto.ValidateUserRequest,
+  ): Promise<user_proto.ValidateUserResponse> {
+    const res: user_proto.ValidateUserResponse = {
+      responseHeader: {
+        success: false,
+      },
+    };
+    try {
+      const user = await this.userServiceService.validateToken(data.token);
+      res.responseHeader.success = true;
+      res.user = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        phoneNumber: user.phoneNumber,
+      };
+    } catch (error) {
+      res.responseHeader.message = error.message;
+      res.responseHeader.code = error.code;
+    }
+    return res;
   }
 }

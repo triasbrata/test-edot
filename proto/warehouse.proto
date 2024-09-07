@@ -24,8 +24,26 @@ service WarehouseService {
   rpc SetWarehouseStatus(SetWarehouseStatusRequest) returns (SetWarehouseStatusResponse) {}
 
   rpc GetProductWarehouseInfo(GetProductWarehouseInfoRequest) returns (GetProductWarehouseInfoResponse){}
-}
 
+  rpc ReserveStock(ReserveStockRequest) returns (ReserveStockResponse){}
+}
+message ReserveStockRequest  {
+  message ItemReserve{
+    int32 productId = 1;
+    int32 quantity = 2;
+  }
+  repeated ItemReserve items = 1; 
+  int32 shopId = 2;
+}
+message ReserveStockResponse{
+  message ItemReserved {
+    int32 warehouseId = 1;
+    double price = 2;
+    int32 productId = 3;
+  }
+  MessageResponseHeader responseHeader = 1;
+  repeated ItemReserved data = 2;
+}
 message GetProductWarehouseInfoRequest  {
   repeated int32 productIds = 1;
   repeated int32 warehouseIds = 2;

@@ -77,4 +77,18 @@ export class ClientModuleGRPCService {
       },
     ]);
   }
+  static registerOrder(): DynamicModule {
+    const protoPath = join(resolve('proto'), 'order.proto');
+    return ClientsModule.register([
+      {
+        name: Microservices.OrderService.inject,
+        transport: Transport.GRPC,
+        options: {
+          package: Microservices.OrderService.package,
+          protoPath: protoPath,
+          url: Microservices.OrderService.url,
+        },
+      },
+    ]);
+  }
 }

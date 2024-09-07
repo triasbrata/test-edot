@@ -7,6 +7,8 @@ import "common.proto";
 service UserService {
   // API for user login
   rpc Login(LoginRequest) returns (LoginResponse) {}
+
+  rpc ValidateUser(ValidateUserRequest) returns (ValidateUserResponse) {}
 }
 
 message LoginRequest {
@@ -14,14 +16,22 @@ message LoginRequest {
   string identity = 2; // Login identifier (e.g., email address or phone number)
   string password = 3; // Password of the user
 }
-
-message LoginResponse {
-  MessageResponseHeader responseHeader = 1; // Header for the response
-  message User {
+message User {
     string name = 1; // Name of the user
     string email = 2; // Email address of the user
     string phoneNumber = 3; // Phone number of the user
+    int32 id = 4;
   }
+message ValidateUserResponse{
+  MessageResponseHeader responseHeader = 1; // Header for the response
+  User user = 2; // User details
+}
+message ValidateUserRequest{
+  string token = 1;
+}
+message LoginResponse {
+  MessageResponseHeader responseHeader = 1; // Header for the response
+  
   User user = 2; // User details
   string token = 3;
 }

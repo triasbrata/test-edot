@@ -185,6 +185,32 @@ export namespace warehouse_proto {
       metadata?: Metadata,
       ...rest: any[]
     ): Observable<GetProductWarehouseInfoResponse>;
+    reserveStock(
+      data: ReserveStockRequest,
+      metadata?: Metadata,
+      ...rest: any[]
+    ): Observable<ReserveStockResponse>;
+  }
+  export interface ReserveStockRequest {
+    items?: ReserveStockRequest.ItemReserve[];
+    shopId?: number;
+  }
+  export namespace ReserveStockRequest {
+    export interface ItemReserve {
+      productId?: number;
+      quantity?: number;
+    }
+  }
+  export interface ReserveStockResponse {
+    responseHeader?: common_proto.MessageResponseHeader;
+    data?: ReserveStockResponse.ItemReserved[];
+  }
+  export namespace ReserveStockResponse {
+    export interface ItemReserved {
+      warehouseId?: number;
+      price?: number;
+      productId?: number;
+    }
   }
   export interface GetProductWarehouseInfoRequest {
     productIds?: number[];

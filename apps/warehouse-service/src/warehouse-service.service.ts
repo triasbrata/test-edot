@@ -51,32 +51,90 @@ export class WarehouseServiceService {
     const mapRequest = Object.fromEntries(
       items.map(({ productId, quantity }) => [productId, quantity]),
     );
-    //case for multiple warehouse
-    const resData: warehouse_proto.ReserveStockResponse.ItemReserved[] = [];
-    for (const {
-      quantity,
-      id,
-      price,
-      warehouse_id,
-      product_id,
-    } of fromDB.data) {
-      if (quantity == 0) {
-        continue;
+
+    //clone value
+    const mapRequestFilled = { ...mapRequest };
+    const groupByProductID: Record<number, []> = fromDB.data.reduce(
+      (prev, it) => {
+        prev[it.product_id] = prev[it.product_id] ?? [];
+        prev[it.product_id].push(it);
+        return prev;
+      },
+      {},
+    );
+    const resData: Array<
+      warehouse_proto.ReserveStockResponse.ItemReserved & {
+        id: number;
+        qty: number;
       }
-      const finalQty = quantity - reserve[id];
-      if (finalQty <= 0) {
-        continue;
-      }
-      if (finalQty - mapRequest[id] < 0) {
-        continue;
-      }
-      resData.push({
+    > = [];
+    for (const productWarehouse of Object.values(groupByProductID)) {
+      const tempResData: typeof resData = [];
+      for (const {
+        quantity,
+        id,
         price,
-        productId: product_id,
-        warehouseId: warehouse_id,
-      });
+        warehouse_id,
+        product_id,
+      } of productWarehouse) {
+        if (mapRequestFilled[id] === 0) {
+          continue;
+        }
+        if (quantity == 0) {
+          continue;
+        }
+        const finalQty = quantity - reserve[id];
+        if (finalQty <= 0) {
+          continue;
+        }
+
+        const diffQty = finalQty - mapRequestFilled[product_id];
+        console.log({
+          tempResData,
+          id,
+          mapRequestFilled,
+          warehouse_id,
+          finalQty,
+          diffQty,
+        });
+        if (diffQty < 0) {
+          mapRequestFilled[product_id] -= finalQty;
+          tempResData.push({
+            price,
+            productId: product_id,
+            warehouseId: warehouse_id,
+            id,
+            qty: finalQty,
+          });
+          continue;
+        }
+        if (diffQty >= 0) {
+          resData.push(
+            {
+              price,
+              productId: product_id,
+              warehouseId: warehouse_id,
+              id,
+              qty: mapRequestFilled[product_id],
+            },
+            ...tempResData,
+          );
+          break;
+        }
+      }
     }
-    return resData;
+    resData.map(async (it) => {
+      await this.redisService.incrby(
+        format(RedisKeys.WarehouseReserve, it.id),
+        it.qty,
+      );
+    });
+    //TODO: need figureout prevent overlap stock when race condition
+    return resData.map((it) => ({
+      price: it.price,
+      productId: it.productId,
+      warehouseId: it.productId,
+    }));
   }
   async getProductWarehouseInfo(
     input: warehouse_proto.GetProductWarehouseInfoRequest,

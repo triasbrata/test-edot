@@ -9,4 +9,8 @@ export enum ErrorCode {
   NoWarehouseFound = 3000,
   GetProductWarehouseInfoControllerDefault,
   ProductWarehouseInfoProductId,
+  FailedGetWarehouseStockReserveStock,
+
+  //orderService
+  ReserveCheckoutWarehouse = 4000,
 }

@@ -17,10 +17,32 @@ export class WarehouseServiceController
     private readonly warehouseServiceService: WarehouseServiceService,
   ) {}
   @GrpcMethod(Microservices.WarehouseService.service)
+  async reserveStock(
+    data: warehouse_proto.ReserveStockRequest,
+  ): Promise<warehouse_proto.ReserveStockResponse> {
+    const res: warehouse_proto.ReserveStockResponse = {
+      responseHeader: { success: false },
+    };
+    try {
+      const resp = await this.warehouseServiceService.reserveStock(data.items);
+      res.data = resp.map<warehouse_proto.ReserveStockResponse.ItemReserved>(
+        (it) => {
+          return {
+            warehouseId: it.warehouseId,
+            price: it.price,
+            productId: it.productId,
+          };
+        },
+      );
+    } catch (error) {
+      res.responseHeader.code = error.code;
+      res.responseHeader.message = error.message;
+    }
+    return res;
+  }
+  @GrpcMethod(Microservices.WarehouseService.service)
   async getProductWarehouseInfo(
     data: warehouse_proto.GetProductWarehouseInfoRequest,
-    metadata?: Metadata,
-    ...rest: any[]
   ): Promise<warehouse_proto.GetProductWarehouseInfoResponse> {
     const res: warehouse_proto.GetProductWarehouseInfoResponse = {
       responseHeader: {

@@ -15,7 +15,7 @@ message CheckoutRequest {
   int32 shop_id = 3; // ID of the shop where the order is being placed
 
   message OrderItem {
-    string product_id = 1; // ID of the product being ordered
+    int32 product_id = 1; // ID of the product being ordered
     int32 quantity = 2; // Quantity of the product to reserve during checkout
   }
 }

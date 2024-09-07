@@ -26,7 +26,7 @@ export namespace order_proto {
   export namespace CheckoutRequest {
     export interface OrderItem {
       // ID of the product being ordered
-      productId?: string;
+      productId?: number;
       // Quantity of the product to reserve during checkout
       quantity?: number;
     }

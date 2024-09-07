@@ -14,6 +14,11 @@ export namespace user_proto {
       metadata?: Metadata,
       ...rest: any[]
     ): Observable<LoginResponse>;
+    validateUser(
+      data: ValidateUserRequest,
+      metadata?: Metadata,
+      ...rest: any[]
+    ): Observable<ValidateUserResponse>;
   }
   export interface LoginRequest {
     // Type of login (e.g., email, username)
@@ -23,22 +28,30 @@ export namespace user_proto {
     // Password of the user
     password?: string;
   }
+  export interface User {
+    // Name of the user
+    name?: string;
+    // Email address of the user
+    email?: string;
+    // Phone number of the user
+    phoneNumber?: string;
+    id?: number;
+  }
+  export interface ValidateUserResponse {
+    // Header for the response
+    responseHeader?: common_proto.MessageResponseHeader;
+    // User details
+    user?: user_proto.User;
+  }
+  export interface ValidateUserRequest {
+    token?: string;
+  }
   export interface LoginResponse {
     // Header for the response
     responseHeader?: common_proto.MessageResponseHeader;
     // User details
-    user?: LoginResponse.User;
+    user?: user_proto.User;
     token?: string;
-  }
-  export namespace LoginResponse {
-    export interface User {
-      // Name of the user
-      name?: string;
-      // Email address of the user
-      email?: string;
-      // Phone number of the user
-      phoneNumber?: string;
-    }
   }
 }
 export namespace common_proto {
