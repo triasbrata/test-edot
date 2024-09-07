@@ -123,12 +123,14 @@ export class WarehouseServiceService {
         }
       }
     }
-    resData.map(async (it) => {
-      await this.redisService.incrby(
-        format(RedisKeys.WarehouseReserve, it.id),
-        it.qty,
-      );
-    });
+    await Promise.all(
+      resData.map(async (it) => {
+        await this.redisService.incrby(
+          format(RedisKeys.WarehouseReserve, it.id),
+          it.qty,
+        );
+      }),
+    );
     //TODO: need figureout prevent overlap stock when race condition
     return resData.map((it) => ({
       price: it.price,
